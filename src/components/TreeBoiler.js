@@ -67,9 +67,9 @@ const TreeBoiler = (props) => {
   const fileData = JSON.parse(localStorage.getItem("translate"));
 
   const data =
-      "text/json;charset=utf-8," +
-        encodeURIComponent(JSON.stringify(fileData[language]))
-    
+    language && fileData &&
+    "text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(fileData[language]));
 
   return (
     <Router>
