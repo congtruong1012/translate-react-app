@@ -5,8 +5,13 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 const TreeBoiler = (props) => {
   const [obj, setobj] = useState([]);
+
+  const [language, setlanguage] = useState("");
+
   const { onSetValue } = props;
+
   const valueMap = {};
+
   const loops = (list, parent) => {
     return (list || []).map(({ children, key }) => {
       const node = (valueMap[key] = {
@@ -29,6 +34,7 @@ const TreeBoiler = (props) => {
     }
     return path;
   };
+
   const onSelect = (selectedKeys, info) => {
     const arr = getPath(info.node.title);
     const key = arr.join(".");
@@ -43,6 +49,7 @@ const TreeBoiler = (props) => {
         : { key, title: key, value }
     );
   };
+
   const onData = (e) => {
     let file = e.target.files;
     let reader = new FileReader();
@@ -53,12 +60,20 @@ const TreeBoiler = (props) => {
     };
   };
 
+  const onHandleChange = (e) => {
+    setlanguage(e.target.value);
+  };
+
+  const fileData = JSON.parse(localStorage.getItem("translate"));
+
   const data =
-    "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj));
+      "text/json;charset=utf-8," +
+        encodeURIComponent(JSON.stringify(fileData[language]))
+    
 
   return (
     <Router>
-      <div className="mb-3">
+      <div className="d-flex justify-content-around mb-3">
         <label
           htmlFor="import"
           className="btn btn-primary"
@@ -75,14 +90,28 @@ const TreeBoiler = (props) => {
           id="import"
           style={{ display: "none" }}
         />
-        <a
-          href={`data:${data}`}
-          download="data.json"
-          className="btn btn-success"
-        >
-          <i className="fas fa-download" style={{ marginRight: 10 }}></i>
-          Export
-        </a>
+        <div className="d-flex">
+          <select
+            className="form-control mr-2"
+            name="language"
+            style={{ width: 200 }}
+            value={language}
+            onChange={onHandleChange}
+          >
+            <option value="">Chọn ngôn ngữ</option>
+            <option value="vi">Việt Nam</option>
+            <option value="jp">Nhật Bản</option>
+          </select>
+          <a
+            href={`data:${data}`}
+            download="data.json"
+            className="btn btn-success"
+            disabled={!language}
+          >
+            <i className="fas fa-download" style={{ marginRight: 10 }}></i>
+            Export
+          </a>
+        </div>
       </div>
       <Tree
         showLine

@@ -1,5 +1,0 @@
-export const REACT_APP = 'REACT_APP';
-export const LANGUAGE = 'LANGUAGE';
-export const ADD_LANGUAGE = 'ADD_LANGUAGE';
-export const UPDATE_LANGUAGE = 'UPDATE_LANGUAGE';
-export const DELETE_LANGUAGE = 'DELETE_LANGUAGE';

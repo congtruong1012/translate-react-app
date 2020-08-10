@@ -11,28 +11,36 @@ const Container = styled.div`
 `;
 
 function App() {
-  const [value, setValue ] = useState('')
+  const [value, setValue] = useState("");
+  const [translate, setTranslate] = useState({ vi: {}, jp: {} });
   const onSetValue = (value) => {
     setValue(value);
-  }
+  };
+  const onTranslate = (obj) => {
+    for (let key in value) {
+      translate.vi[key] = obj.vi?obj.vi:value[key];
+      translate.jp[key] = obj.jp?obj.jp:value[key];
+      
+    }
+    localStorage.setItem("translate", JSON.stringify(translate) )
+    console.log(JSON.parse(localStorage.getItem("translate")));
+  };
   return (
     <>
-    <Container>
-      <Row>
-        {/* <Col span={6}>
+      <Container>
+        <Row>
+          {/* <Col span={6}>
           <SideBar />
         </Col> */}
-        <Col span={12}>
-          <TreeBoiler onSetValue={onSetValue} />
-        </Col>
-        <Col span={12}>
-          <Translate content={value} />
-        </Col>
-      </Row>
-      
-    </Container>
+          <Col span={12}>
+            <TreeBoiler onSetValue={onSetValue} />
+          </Col>
+          <Col span={12}>
+            <Translate content={value} onTranslate={onTranslate} />
+          </Col>
+        </Row>
+      </Container>
     </>
-    
   );
 }
 

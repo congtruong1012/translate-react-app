@@ -4,7 +4,7 @@ import { Form } from "antd";
 import React, { useState, useEffect } from "react";
 
 const Translate = (props) => {
-  const { content } = props;
+  const { content, onTranslate } = props;
   const [language, setLanguage] = useState({
     en: "",
     vi: "",
@@ -24,7 +24,12 @@ const Translate = (props) => {
   };
 
   const onHandleSubmit = (e) => {
-    console.log(language);
+    onTranslate(language);
+    setLanguage({
+      en: "",
+      vi: "",
+      jp: "",
+    })
   };
   return (
     <>
@@ -37,7 +42,7 @@ const Translate = (props) => {
               <textarea
                 name="en"
                 onChange={onHandleChange}
-                defaultValue={language.en}
+                value={language.en}
                 style={{ width: "100%" }}
                 row="2"
                 className="form-control"
@@ -52,7 +57,7 @@ const Translate = (props) => {
                 row="2"
                 className="form-control"
                 onChange={onHandleChange}
-                defaultValue={language.vi}
+                value={language.vi}
               ></textarea>
             </div>
             <div className="form-group">
@@ -63,7 +68,7 @@ const Translate = (props) => {
                 style={{ width: "100%" }}
                 onChange={onHandleChange}
                 row="2"
-                defaultValue={language.jp}
+                value={language.jp}
               ></textarea>
             </div>
             <button type="submit" className="btn btn-primary">
