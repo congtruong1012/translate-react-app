@@ -4,7 +4,7 @@ import { useHistory, Link } from "react-router-dom";
 
 
 const Header = () => {
-
+  const jwt = JSON.parse(localStorage.getItem("login"));
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -39,7 +39,7 @@ const Header = () => {
                   aria-expanded="false"
                   style={{ fontSize: "1rem" }}
                 >
-                  Full Name
+                  {jwt.username}
                 </a>
                 <div
                   className="dropdown-menu"

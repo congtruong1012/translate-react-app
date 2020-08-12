@@ -1,6 +1,6 @@
 /* eslint-disable valid-typeof */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Form } from "antd";
+import { Form, notification } from "antd";
 import React, { useState, useEffect } from "react";
 
 const Translate = (props) => {
@@ -25,11 +25,9 @@ const Translate = (props) => {
 
   const onHandleSubmit = (e) => {
     onTranslate(language);
-    setLanguage({
-      en: "",
-      vi: "",
-      jp: "",
-    })
+    notification["success"]({
+      message: "Translate Success",
+    });
   };
   return (
     <>

@@ -2,7 +2,7 @@ import Axios from "axios";
 
 const fetchAPI = (endPoint, method = "GET", data ) => {
     return Axios({
-        url:  "http://localhost:2000/"+endPoint,
+        url:  "http://localhost:4000/api"+endPoint,
         method,
         data
     }).catch(e => console.log(e))

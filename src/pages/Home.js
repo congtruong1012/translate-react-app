@@ -13,19 +13,23 @@ const Container = styled.div`
 const Home = () => {
   const [value, setValue] = useState("");
 
-  const [translate, setTranslate] = useState({ vi: {}, jp: {} });
+  const [translate, setTranslate] = useState({en : "", vi : "", jp : ""});
 
   const onSetValue = (value) => {
     setValue(value);
   };
 
   const onTranslate = (obj) => {
-    for (let key in value) {
-      translate.vi[key] = obj.vi ? obj.vi : value[key];
-      translate.jp[key] = obj.jp ? obj.jp : value[key];
-    }
-    localStorage.setItem("translate", JSON.stringify(translate));
-    console.log(JSON.parse(localStorage.getItem("translate")));
+    const en = obj.en;
+    const vi = obj.vi?obj.vi:obj.en;
+    const jp = obj.jp?obj.jp:obj.en;
+    setTranslate({...translate, en, vi, jp});
+    // for (let key in value) {
+    //   translate.vi[key] = obj.vi ? obj.vi : value[key];
+    //   translate.jp[key] = obj.jp ? obj.jp : value[key];
+    // }
+    // localStorage.setItem("translate", JSON.stringify(translate));
+    // console.log(JSON.parse(localStorage.getItem("translate")));
   };
   
   if (localStorage.getItem("login")) {
