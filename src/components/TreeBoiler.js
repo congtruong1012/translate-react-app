@@ -1,7 +1,6 @@
 import { DownOutlined } from "@ant-design/icons";
 import { Tree } from "antd";
 import React, { useState } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
 
 const TreeBoiler = (props) => {
   const [obj, setobj] = useState([]);
@@ -11,6 +10,17 @@ const TreeBoiler = (props) => {
   const { onSetValue } = props;
 
   const valueMap = {};
+
+  const randomString = e =>{
+    const le = e || 32;
+    const str ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+    let st = '';
+    for(let i = 0 ; i < le ; i++){
+      st += str.charAt(Math.floor(Math.random()*str.length))
+    }
+    
+    return st;
+  }
 
   const loops = (list, parent) => {
     return (list || []).map(({ children, key }) => {
@@ -45,8 +55,8 @@ const TreeBoiler = (props) => {
   const getNodes = (object) => {
     return Object.entries(object).map(([key, value]) =>
       value && typeof value === "object"
-        ? { key, title: key, value, children: getNodes(value) }
-        : { key, title: key, value }
+        ? { key : randomString(10) , title: key, value, children: getNodes(value) }
+        : { key : randomString(10), title: key, value }
     );
   };
 
@@ -60,6 +70,7 @@ const TreeBoiler = (props) => {
     };
   };
 
+
   const onHandleChange = (e) => {
     setlanguage(e.target.value);
   };
@@ -67,13 +78,14 @@ const TreeBoiler = (props) => {
   const fileData = JSON.parse(localStorage.getItem("translate"));
 
   const data =
-    language && fileData &&
+    language &&
+    fileData &&
     "text/json;charset=utf-8," +
       encodeURIComponent(JSON.stringify(fileData[language]));
 
   return (
-    <Router>
-      <div className="d-flex justify-content-around mb-3">
+    <>
+      <div className="d-flex justify-content-between mb-3 mx-lg-3">
         <label
           htmlFor="import"
           className="btn btn-primary"
@@ -112,6 +124,7 @@ const TreeBoiler = (props) => {
             Export
           </a>
         </div>
+
       </div>
       <Tree
         showLine
@@ -119,8 +132,10 @@ const TreeBoiler = (props) => {
         onSelect={onSelect}
         treeData={obj}
       />
-    </Router>
+    </>
   );
 };
 
 export default TreeBoiler;
+
+

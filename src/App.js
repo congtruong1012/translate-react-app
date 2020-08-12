@@ -1,47 +1,21 @@
-import { Col, Row } from "antd";
-import React, { useState } from "react";
-import styled from "styled-components";
-import Translate from "./components/Translate";
-import TreeBoiler from "./components/TreeBoiler";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Logout from "./pages/Logout";
 
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  margin-top: 30px;
-`;
-
-function App() {
-  const [value, setValue] = useState("");
-  const [translate, setTranslate] = useState({ vi: {}, jp: {} });
-  const onSetValue = (value) => {
-    setValue(value);
-  };
-  const onTranslate = (obj) => {
-    for (let key in value) {
-      translate.vi[key] = obj.vi?obj.vi:value[key];
-      translate.jp[key] = obj.jp?obj.jp:value[key];
-      
-    }
-    localStorage.setItem("translate", JSON.stringify(translate) )
-    console.log(JSON.parse(localStorage.getItem("translate")));
-  };
+const App = () => {
   return (
-    <>
-      <Container>
-        <Row>
-          {/* <Col span={6}>
-          <SideBar />
-        </Col> */}
-          <Col span={12}>
-            <TreeBoiler onSetValue={onSetValue} />
-          </Col>
-          <Col span={12}>
-            <Translate content={value} onTranslate={onTranslate} />
-          </Col>
-        </Row>
-      </Container>
-    </>
+    <Router>
+      <Switch>
+        <Route path="/login" component={() => <Login />} />
+        <Route path="/register" component={() => <Register />} />
+        <Route path="/logout" component={() => <Logout />} />
+        <Route path="/" component={() => <Home  />} />
+      </Switch>
+    </Router>
   );
-}
+};
 
 export default App;
