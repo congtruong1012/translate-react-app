@@ -1,9 +1,10 @@
+import { Col, Row } from "antd";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Row, Col } from "antd";
+import fetchAPI from "../Api/fetchAPI";
 import Header from "../components/Header";
-import TreeBoiler from "../components/TreeBoiler";
 import Translate from "../components/Translate";
+import TreeBoiler from "../components/TreeBoiler";
 import { Redirect } from "react-router-dom";
 const Container = styled.div`
   max-width: 1200px;
@@ -13,44 +14,42 @@ const Container = styled.div`
 const Home = () => {
   const [value, setValue] = useState("");
 
-  const [translate, setTranslate] = useState({en : "", vi : "", jp : ""});
-
   const onSetValue = (value) => {
     setValue(value);
   };
 
   const onTranslate = (obj) => {
     const en = obj.en;
-    const vi = obj.vi?obj.vi:obj.en;
-    const jp = obj.jp?obj.jp:obj.en;
-    setTranslate({...translate, en, vi, jp});
-    // for (let key in value) {
-    //   translate.vi[key] = obj.vi ? obj.vi : value[key];
-    //   translate.jp[key] = obj.jp ? obj.jp : value[key];
-    // }
-    // localStorage.setItem("translate", JSON.stringify(translate));
-    // console.log(JSON.parse(localStorage.getItem("translate")));
+    const vi = obj.vi ? obj.vi : obj.en;
+    const jp = obj.jp ? obj.jp : obj.en;
+    const translate = {en, vi, jp}
+    for (let key in translate) {
+      if (key !== "en") {
+        fetchAPI("/language", "POST", {
+          key: key,
+          message: en,
+          translate: translate[key],
+        }).then((res) => console.log(res.config.data));
+      }
+    }
   };
-  
-  if (localStorage.getItem("login")) {
-    return (
-      <>
-        <Header />
-        <Container>
-          <Row>
-            {/* <Col span={6}>
-            <SideBar />
-          </Col> */}
-            <Col span={12} lg={12} md={24} xs={24}>
-              <TreeBoiler onSetValue={onSetValue} />
-            </Col>
-            <Col span={12} lg={12} md={24} xs={24}>
-              <Translate content={value} onTranslate={onTranslate} />
-            </Col>
-          </Row>
-        </Container>
-      </>
-    );
+
+  if (localStorage.getItem("cool-token")) {
+  return (
+    <>
+      <Header />
+      <Container>
+        <Row>
+          <Col span={12} lg={12} md={24} xs={24}>
+            <TreeBoiler onSetValue={onSetValue} />
+          </Col>
+          <Col span={12} lg={12} md={24} xs={24}>
+            <Translate content={value} onTranslate={onTranslate} />
+          </Col>
+        </Row>
+      </Container>
+    </>
+  );
   } else {
     return <Redirect to="/login" />;
   }

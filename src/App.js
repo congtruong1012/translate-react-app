@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Logout from "./pages/Logout";
 
 const App = () => {
   return (
@@ -11,8 +10,7 @@ const App = () => {
       <Switch>
         <Route path="/login" component={() => <Login />} />
         <Route path="/register" component={() => <Register />} />
-        <Route path="/logout" component={() => <Logout />} />
-        <Route path="/" component={() => <Home  />} />
+        <Route path="/" exact component={() => <Home  />} />
       </Switch>
     </Router>
   );

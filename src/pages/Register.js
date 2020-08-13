@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { notification } from "antd";
-import fetchAPI from "../API/fetchAPI";
+import fetchApi from "../Api/fetchAPI";
 
 const Register = (props) => {
   const history = useHistory();
@@ -19,7 +19,7 @@ const Register = (props) => {
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
-    fetchAPI("auth", "POST", register).then((res) => {
+    fetchApi("auth", "POST", register).then((res) => {
       if (res.status === 201) {
         setTimeout(() => {
           history.push({ pathname: "/login" });

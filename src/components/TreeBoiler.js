@@ -1,26 +1,30 @@
 import { DownOutlined } from "@ant-design/icons";
 import { Tree } from "antd";
 import React, { useState } from "react";
+import fetchAPI from "../Api/fetchAPI";
 
 const TreeBoiler = (props) => {
   const [obj, setobj] = useState([]);
 
   const [language, setlanguage] = useState("");
 
+  const [data, setData] = useState("");
+
   const { onSetValue } = props;
 
   const valueMap = {};
 
-  const randomString = e =>{
+  const randomString = (e) => {
     const le = e || 32;
-    const str ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
-    let st = '';
-    for(let i = 0 ; i < le ; i++){
-      st += str.charAt(Math.floor(Math.random()*str.length))
+    const str =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    let st = "";
+    for (let i = 0; i < le; i++) {
+      st += str.charAt(Math.floor(Math.random() * str.length));
     }
-    
+
     return st;
-  }
+  };
 
   const loops = (list, parent) => {
     return (list || []).map(({ children, key }) => {
@@ -55,8 +59,13 @@ const TreeBoiler = (props) => {
   const getNodes = (object) => {
     return Object.entries(object).map(([key, value]) =>
       value && typeof value === "object"
-        ? { key : randomString(10) , title: key, value, children: getNodes(value) }
-        : { key : randomString(10), title: key, value }
+        ? {
+            key: randomString(10),
+            title: key,
+            value,
+            children: getNodes(value),
+          }
+        : { key: randomString(10), title: key, value }
     );
   };
 
@@ -70,18 +79,17 @@ const TreeBoiler = (props) => {
     };
   };
 
-
   const onHandleChange = (e) => {
     setlanguage(e.target.value);
+    if (language) {
+      fetchAPI("/language/" + language, "GET", null)
+        .then((res) => {
+          setData(JSON.stringify(res.data));
+          console.log(language);
+        })
+        .catch((e) => console.log(e));
+    }
   };
-
-  const fileData = JSON.parse(localStorage.getItem("translate"));
-
-  const data =
-    language &&
-    fileData &&
-    "text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(fileData[language]));
 
   return (
     <>
@@ -115,7 +123,7 @@ const TreeBoiler = (props) => {
             <option value="jp">Nhật Bản</option>
           </select>
           <a
-            href={`data:${data}`}
+            href={"data:text/json;charset=utf-8," + encodeURIComponent(data)}
             download="data.json"
             className="btn btn-success"
             disabled={!language}
@@ -124,7 +132,6 @@ const TreeBoiler = (props) => {
             Export
           </a>
         </div>
-
       </div>
       <Tree
         showLine
@@ -137,5 +144,3 @@ const TreeBoiler = (props) => {
 };
 
 export default TreeBoiler;
-
-

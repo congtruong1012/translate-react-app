@@ -1,7 +1,7 @@
 /* eslint-disable valid-typeof */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Form, notification } from "antd";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const Translate = (props) => {
   const { content, onTranslate } = props;

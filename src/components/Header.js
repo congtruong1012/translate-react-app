@@ -1,10 +1,15 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from "react";
-import { useHistory, Link } from "react-router-dom";
-
+import { useHistory } from "react-router-dom";
 
 const Header = () => {
-  const jwt = JSON.parse(localStorage.getItem("login"));
+  const history = useHistory();
+  const user = JSON.parse(localStorage.getItem("cool-token"));
+
+  const logout = () => {
+    localStorage.removeItem("cool-token");
+    history.push("/login");
+  };
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -39,16 +44,21 @@ const Header = () => {
                   aria-expanded="false"
                   style={{ fontSize: "1rem" }}
                 >
-                  {jwt.username}
+                  {user.user.username}
                 </a>
                 <div
                   className="dropdown-menu"
                   style={{ right: 0, left: "auto" }}
                   aria-labelledby="navbarDropdown"
                 >
-                  <Link className="dropdown-item" to="/logout" style={{cursor : "pointer"}}>
+                  <button
+                    onClick={logout}
+                    className="dropdown-item"
+                    to="/logout"
+                    style={{ cursor: "pointer" }}
+                  >
                     <i className="fas fa-sign-out-alt mr-2"></i> Đăng xuất
-                  </Link>
+                  </button>
                 </div>
               </li>
             </ul>

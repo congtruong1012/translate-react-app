@@ -1,7 +1,7 @@
-import Axios from "axios";
+import axios from "axios";
 
 const fetchAPI = (endPoint, method = "GET", data ) => {
-    return Axios({
+    return axios({
         url:  "http://localhost:4000/api"+endPoint,
         method,
         data
