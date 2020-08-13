@@ -6,9 +6,9 @@ import fetchAPI from "../Api/fetchAPI";
 const TreeBoiler = (props) => {
   const [obj, setobj] = useState([]);
 
-  const [language, setlanguage] = useState("");
-
   const [data, setData] = useState("");
+
+  const [isShow, setShow] = useState(false);
 
   const { onSetValue } = props;
 
@@ -46,11 +46,12 @@ const TreeBoiler = (props) => {
       path.unshift(current.key);
       current = current.parent;
     }
-    return path;
+    const newPath = path.map(item => item.split("-")[0]);
+    return newPath;
   };
 
   const onSelect = (selectedKeys, info) => {
-    const arr = getPath(info.node.title);
+    const arr = getPath(info.node.key);
     const key = arr.join(".");
     const value = info.node.value;
     onSetValue({ [key]: value });
@@ -60,12 +61,12 @@ const TreeBoiler = (props) => {
     return Object.entries(object).map(([key, value]) =>
       value && typeof value === "object"
         ? {
-            key: randomString(10),
+            key: `${key}-${randomString(10)}`,
             title: key,
             value,
             children: getNodes(value),
           }
-        : { key: randomString(10), title: key, value }
+        : { key: `${key}-${randomString(10)}`, title: key, value }
     );
   };
 
@@ -80,14 +81,21 @@ const TreeBoiler = (props) => {
   };
 
   const onHandleChange = (e) => {
-    setlanguage(e.target.value);
+    const language = e.target.value;
     if (language) {
-      fetchAPI("/language/" + language, "GET", null)
+      fetchAPI(`/language/get/${language}`, "GET", null)
         .then((res) => {
-          setData(JSON.stringify(res.data));
-          console.log(language);
+          let data = {}
+          for(var item of res.data){
+            data[item.key] = item.message[language];
+          }
+          setData(JSON.stringify(data));
+          setShow(true)
         })
         .catch((e) => console.log(e));
+    }
+    else{
+      setShow(false);
     }
   };
 
@@ -115,7 +123,6 @@ const TreeBoiler = (props) => {
             className="form-control mr-2"
             name="language"
             style={{ width: 200 }}
-            value={language}
             onChange={onHandleChange}
           >
             <option value="">Chọn ngôn ngữ</option>
@@ -126,7 +133,7 @@ const TreeBoiler = (props) => {
             href={"data:text/json;charset=utf-8," + encodeURIComponent(data)}
             download="data.json"
             className="btn btn-success"
-            disabled={!language}
+            disabled={!isShow}
           >
             <i className="fas fa-download" style={{ marginRight: 10 }}></i>
             Export

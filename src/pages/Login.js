@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import fetchApi from "../Api/fetchAPI";
+import fetchAPI from "../Api/fetchAPI";
 
 const Login = (props) => {
   const [login, setLogin] = useState({
@@ -25,16 +25,15 @@ const Login = (props) => {
   };
 
   const Login = (email, password) => {
-      fetchApi("/user/login", "POST", {email, password})
+     fetchAPI("/user/login", "POST", {email, password})
       .then((res) => {
-        if (res.status === 200) {
-          localStorage.setItem("cool-token", JSON.stringify(res.data));
+        if (res.data.success) {
+          localStorage.setItem("cool-token", JSON.stringify(res.data.data.token));
           setError("");
           history.push({ pathname: "/" });
         } else {
-          setError("Login Fail");
+          setError(res.data.msg);
         }
-        console.log(res);
       })
       .catch((e) => {
         setError("Login Fail");

@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import { useHistory } from "react-router-dom";
+import jwt from "jwt-decode";
 
 const Header = () => {
   const history = useHistory();
-  const user = JSON.parse(localStorage.getItem("cool-token"));
+  const user = jwt(JSON.parse(localStorage.getItem("cool-token")));
+  
 
   const logout = () => {
     localStorage.removeItem("cool-token");

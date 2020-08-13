@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col, Row, notification } from "antd";
 import React, { useState } from "react";
 import styled from "styled-components";
 import fetchAPI from "../Api/fetchAPI";
@@ -23,13 +23,16 @@ const Home = () => {
     const vi = obj.vi ? obj.vi : obj.en;
     const jp = obj.jp ? obj.jp : obj.en;
     const translate = {en, vi, jp}
-    for (let key in translate) {
+    for (let key in value) {
       if (key !== "en") {
         fetchAPI("/language", "POST", {
           key: key,
-          message: en,
-          translate: translate[key],
-        }).then((res) => console.log(res.config.data));
+          message: translate,
+        }).then((res) =>{
+          notification["success"]({
+            message: "Translate Success",
+          });
+        });
       }
     }
   };
